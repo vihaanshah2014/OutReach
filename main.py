@@ -8,7 +8,8 @@ class SocialMediaScraper:
         self.browser = None
         self.context = None
         self.page = None
-        self.client = OpenAI()  # Initialize OpenAI client
+        self.client = OpenAI()
+        self.num_posts_to_scrape = 2
 
     def start_browser(self):
         playwright = sync_playwright().start()
@@ -24,7 +25,7 @@ class SocialMediaScraper:
         try:
             print(f"Searching YouTube channel @{youtube_username} for Instagram links...")
             self.page.goto(f"https://www.youtube.com/@{youtube_username}/videos")
-            self.page.wait_for_load_state('networkidle')  # Wait for the page to fully load
+            self.page.wait_for_load_state('networkidle')
             print("Scanning YouTube about page...")
             
             links = self.page.query_selector_all("a[href*='instagram.com']")
@@ -47,7 +48,7 @@ class SocialMediaScraper:
         try:
             print(f"Searching Instagram profile @{instagram_username} for YouTube links...")
             self.page.goto(f"https://www.instagram.com/{instagram_username}")
-            self.page.wait_for_load_state('networkidle')  # Wait for the page to fully load
+            self.page.wait_for_load_state('networkidle')
             print("Scanning Instagram bio...")
             
             links = self.page.query_selector_all("a[href*='youtube.com']")
@@ -70,15 +71,14 @@ class SocialMediaScraper:
         try:
             print(f"\nFetching recent YouTube videos for @{youtube_username}...")
             self.page.goto(f"https://www.youtube.com/@{youtube_username}/videos")
-            self.page.wait_for_load_state('networkidle')  # Wait for the page to fully load
+            self.page.wait_for_load_state('networkidle')
 
             videos = []
-            # Get channel description from meta tag
             channel_description = self.page.query_selector('meta[property="og:description"]')
             channel_desc = channel_description.get_attribute("content") if channel_description else "No description available"
             print(f"Channel description: {channel_desc}")
 
-            video_elements = self.page.query_selector_all("#video-title")[:2]  # Get first 2 videos using ID selector
+            video_elements = self.page.query_selector_all("#video-title")[:self.num_posts_to_scrape]
             
             if not video_elements:
                 print("No videos found on channel")
@@ -103,10 +103,10 @@ class SocialMediaScraper:
         try:
             print(f"\nFetching recent Instagram posts for @{instagram_username}...")
             self.page.goto(f"https://www.instagram.com/{instagram_username}")
-            self.page.wait_for_load_state('networkidle')  # Wait for the page to fully load
+            self.page.wait_for_load_state('networkidle')
 
             posts = []
-            post_elements = self.page.query_selector_all("article a")[:2]
+            post_elements = self.page.query_selector_all("article a")[:self.num_posts_to_scrape]
             
             if not post_elements:
                 print("No posts found on profile")
@@ -128,10 +128,10 @@ class SocialMediaScraper:
         try:
             print(f"\nFetching recent Twitter posts for @{twitter_username}...")
             self.page.goto(f"https://twitter.com/{twitter_username}")
-            self.page.wait_for_load_state('networkidle')  # Wait for the page to fully load
+            self.page.wait_for_load_state('networkidle')
 
             tweets = []
-            tweet_elements = self.page.query_selector_all("article div[lang]")[:2]  # Get first 2 tweets
+            tweet_elements = self.page.query_selector_all("article div[lang]")[:self.num_posts_to_scrape]
             
             if not tweet_elements:
                 print("No tweets found on profile")
@@ -180,7 +180,7 @@ class SocialMediaScraper:
                 model="gpt-4o-mini",
                 messages=[
                     {"role": "developer", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": f"Create a short, professional DM from Vihaan asking the YouTuber @{youtube_username} to create a community on Nas.io. Dont start with hope you are well, start with I am a fan... Make it relevant to their content if possible. {content_summary}"}
+                    {"role": "user", "content": f"Create a short, professional DM from Vihaan asking the YouTuber @{youtube_username} to create a community on Nas.io. Dont start with hope you are well, start with I am a fan... The Call to Action should be I would love to hop on a short 15 minute call to walk you through Nas.io. Otherwise feel free to check it out yourself as it is free and super easy to setup Make it relevant to their content if possible. {content_summary}"}
                 ]
             )
             message = completion.choices[0].message.content
