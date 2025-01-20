@@ -1,7 +1,7 @@
-Social Media Scraper
+Social Media Outreach AI
 ====================
 
-This project provides a Python-based scraper that extracts recent posts and links from YouTube, Instagram, and Twitter profiles. It also generates professional direct messages (DMs) based on the scraped content to promote Nas.io.
+This project provides a Python-based scraper that extracts recent posts and links from YouTube, Instagram, and Twitter profiles. It also generates professional direct messages (DM) based on the scraped content to promote Nas.io.
 
 Features
 --------
@@ -11,8 +11,6 @@ Features
 *   **Instagram Scraping**: Extract recent post URLs from a user's profile.
     
 *   **Twitter Scraping**: Extract recent tweets from a user's profile.
-    
-*   **Cross-Platform Link Discovery**: Find Instagram links from YouTube profiles and vice versa.
     
 *   **AI-Generated DMs**: Use OpenAI's API to craft professional, personalized messages based on a user's content.
     
@@ -37,7 +35,7 @@ Requirements
     
 2.  playwright install
     
-3.  Configure OpenAI API credentials in your environment or as needed.
+3.  Configure OpenAI API credentials in your environment or as needed. (set OPENAI_API_KEY=yourkey)
     
 
 Usage
