@@ -12,7 +12,7 @@ class SocialMediaScraper:
 
     def start_browser(self):
         playwright = sync_playwright().start()
-        self.browser = playwright.chromium.launch(headless=False)
+        self.browser = playwright.chromium.launch(headless=True)
         self.context = self.browser.new_context()
         self.page = self.context.new_page()
 
@@ -193,7 +193,6 @@ class SocialMediaScraper:
 
 def main():
     print("Initializing Scraper...")
-    print("A blank page will open up!")
     time.sleep(0.5)
     scraper = SocialMediaScraper()
     scraper.start_browser()
