@@ -1,4 +1,2 @@
-.vercel
-venv
-.idea
-__pycache__
+/hidden
+/venv
